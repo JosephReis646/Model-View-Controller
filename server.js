@@ -3,9 +3,10 @@ const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const path = require('path');
-const routes = require('./controllers');
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const userRoutes = require('./controllers/userController');
+
 
 // Load environment variables
 require('dotenv').config();
@@ -40,7 +41,8 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // Set up the routes
-app.use(routes);
+app.use(userRoutes);
+
 
 // Start the server and sync the models
 sequelize.sync({ force: false }).then(() => {

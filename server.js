@@ -26,3 +26,25 @@ const sess = {
     db: sequelize,
   }),
 };
+
+// Use the session middleware
+app.use(session(sess));
+
+// Set up the middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Set up Handlebars as the templating engine
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+
+// Set up the routes
+app.use(routes);
+
+// Start the server and sync the models
+sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}!`);
+  });
+});
